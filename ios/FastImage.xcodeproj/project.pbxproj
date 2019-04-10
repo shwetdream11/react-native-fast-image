@@ -234,12 +234,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"${BUILT_PRODUCTS_DIR}",
+					"${SRCROOT}/../../../../ios/Pods/SDWebImage",
+				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../react-native/Libraries/Image",
-					"$(SRCROOT)/../../../ios/Pods/Headers/Public/**",
-					"$(SRCROOT)/Vendor/SDWebImage",
-					"$(SRCROOT)/Vendor/SDWebImage/Vendors/FLAnimatedImage",
+					"$(inherited)",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../react-native/Libraries/Image",
+					"$(SRCROOT)/../../../../ios/Pods/Headers/Public/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -251,12 +255,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"${BUILT_PRODUCTS_DIR}",
+					"${SRCROOT}/../../../../ios/Pods/SDWebImage",
+				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/../../react-native/React/**",
-					"$(SRCROOT)/../../react-native/Libraries/Image",
-					"$(SRCROOT)/../../../ios/Pods/Headers/Public/**",
-					"$(SRCROOT)/Vendor/SDWebImage",
-					"$(SRCROOT)/Vendor/SDWebImage/Vendors/FLAnimatedImage",
+					"$(inherited)",
+					"$(SRCROOT)/../../../react-native/React/**",
+					"$(SRCROOT)/../../../react-native/Libraries/Image",
+					"$(SRCROOT)/../../../../ios/Pods/Headers/Public/**",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
