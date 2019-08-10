@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import PropTypes, {number} from 'prop-types'
+import PropTypes from 'prop-types'
 import {
   View,
   Image,
@@ -126,6 +126,7 @@ const FastImageGradientPropType = PropTypes.shape({
   blendMode: PropTypes.oneOf(Object.keys(FastImage.blendMode)),
   colors: PropTypes.arrayOf(PropTypes.string | PropTypes.number),
   locations: PropTypes.arrayOf(PropTypes.number),
+  angle: PropTypes.number,
 })
 
 FastImage.propTypes = {

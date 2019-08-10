@@ -61,7 +61,8 @@ export type FastImageSource = {
 export type FastImageGradient = {
     blendMode: FastImage.BlendMode
     colors: Array<string | number>
-    locations: Array<number
+    locations: Array<number>
+    angle: number
 }
 
 export interface ImageStyle extends FlexStyle, TransformsStyle, ShadowStyleIOS {

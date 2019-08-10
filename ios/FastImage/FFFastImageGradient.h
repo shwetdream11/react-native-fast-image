@@ -11,19 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, FFFastImageBlendMode) {
-    FFFastImageBlendModeOverlay = kCGBlendModeOverlay
-};
-
 @interface FFFastImageGradient : NSObject
 
 @property (nonatomic, assign) CGBlendMode blendMode;
 @property (nonatomic, copy) NSArray<UIColor *>* colors;
 @property (nonatomic, copy) NSArray* locations;
+@property (nonatomic, copy) NSNumber* angle;
 
 - (instancetype)initWithColors:(NSArray<UIColor *>*)colors
                      blendMode:(CGBlendMode)blendMode
-                     locations:(NSArray *)locations;
+                     locations:(NSArray *)locations
+                         angle:(NSNumber *)angle;
 @end
 
 NS_ASSUME_NONNULL_END

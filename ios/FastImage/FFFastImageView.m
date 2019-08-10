@@ -1,12 +1,20 @@
 #import "FFFastImageView.h"
 
 @interface UIImage (Tint)
-- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations;
+- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations angle:(NSNumber *)angle;
 @end
 
 @implementation UIImage (Tint)
 
-- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations
+- (CGSize)calculateGradientLocationWithAngle:(CGFloat)angle
+{
+    CGFloat angleRad = (angle - 90) * (M_PI / 180);
+    CGFloat length = sqrt(2);
+    
+    return CGSizeMake(cos(angleRad) * length, sin(angleRad) * length);
+}
+
+- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations angle:(NSNumber *)angle
 {
     CGFloat *_locations = nil;
     
@@ -36,7 +44,23 @@
     CGGradientRef grad = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)_colors, _locations);
     CGColorSpaceRelease(colorSpace);
     
-    CGContextDrawLinearGradient(ctx, grad, CGPointMake(0, 0), CGPointMake(bounds.size.width, bounds.size.height), 0);
+    CGPoint startPoint = CGPointMake(0, 0);
+    CGPoint endPoint = CGPointMake(1, 1);
+    
+    if ([angle floatValue] != 0.0) {
+        CGPoint _angleCenter = CGPointMake(0.5, 0.5);
+        CGSize size = [self calculateGradientLocationWithAngle: [angle floatValue]];
+        startPoint.x = _angleCenter.x - size.width / 2;
+        startPoint.y = _angleCenter.y - size.height / 2;
+        endPoint.x = _angleCenter.x + size.width / 2;
+        endPoint.y = _angleCenter.y + size.height / 2;
+    }
+    
+    CGContextDrawLinearGradient(ctx,
+                                grad,
+                                CGPointMake(startPoint.x * bounds.size.width, startPoint.y * bounds.size.height),
+                                CGPointMake(endPoint.x * bounds.size.width, endPoint.y * bounds.size.height),
+                                0);
     CGGradientRelease(grad);
     
     UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -232,7 +256,7 @@
 
 - (void)updateGradient {
     if (_gradient && [self image]) {
-        [self setImage:[[self image] tintedImageWithColor:_gradient.colors blendingMode:_gradient.blendMode locations: _gradient.locations]];
+        [self setImage:[[self image] tintedImageWithColor:_gradient.colors blendingMode:_gradient.blendMode locations: _gradient.locations angle:_gradient.angle]];
     }
 }
 

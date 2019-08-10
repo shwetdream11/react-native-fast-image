@@ -68,7 +68,7 @@ class FastImageViewConverter {
     }
 
     static FastImageGradient getImageGradient(Context context, ReadableMap gradient) {
-        return new FastImageGradient(context, getColors(gradient), getBlendMode(gradient), getLocations(gradient));
+        return new FastImageGradient(context, getColors(gradient), getBlendMode(gradient), getLocations(gradient), gradient.getInt("angle"));
     }
 
     static Headers getHeaders(ReadableMap source) {

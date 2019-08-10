@@ -10,12 +10,13 @@
 
 @implementation FFFastImageGradient
 
-- (instancetype)initWithColors:(NSArray *)colors blendMode:(FFFastImageBlendMode)blendMode locations:(NSArray *)locations {
+- (instancetype)initWithColors:(NSArray *)colors blendMode:(CGBlendMode)blendMode locations:(NSArray *)locations angle:(nonnull NSNumber *)angle {
     self = [super init];
     if (self) {
         _colors = colors;
         _blendMode = blendMode;
         _locations = locations;
+        _angle = angle;
     }
     return self;
 }

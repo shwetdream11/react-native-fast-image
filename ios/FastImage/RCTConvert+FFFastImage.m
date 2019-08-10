@@ -1,6 +1,7 @@
 #import "RCTConvert+FFFastImage.h"
 #import "FFFastImageSource.h"
 #import "FFFastImageGradient.h"
+#import <CoreGraphics/CoreGraphics.h>
 
 @implementation RCTConvert (FFFastImage)
 
@@ -16,9 +17,9 @@ RCT_ENUM_CONVERTER(FFFCacheControl, (@{
                                        @"cacheOnly": @(FFFCacheControlCacheOnly),
                                        }), FFFCacheControlImmutable, integerValue);
 
-RCT_ENUM_CONVERTER(FFFastImageBlendMode, (@{
-                                            @"overlay": @(FFFastImageBlendModeOverlay),
-                                            }), FFFastImageBlendModeOverlay, integerValue);
+RCT_ENUM_CONVERTER(CGBlendMode, (@{
+                                            @"overlay": @(kCGBlendModeOverlay),
+                                            }), kCGBlendModeOverlay, integerValue);
 
 + (FFFastImageSource *)FFFastImageSource:(id)json {
     if (!json) {
@@ -58,7 +59,7 @@ RCT_ENUM_CONVERTER(FFFastImageBlendMode, (@{
         return nil;
     }
     
-    FFFastImageBlendMode blendMode = [self FFFastImageBlendMode:json[@"blendMode"]];
+    CGBlendMode blendMode = [self CGBlendMode:json[@"blendMode"]];
     NSArray * gradientColors = json[@"colors"];
     NSArray * locations = json[@"locations"];
     
@@ -75,7 +76,7 @@ RCT_ENUM_CONVERTER(FFFastImageBlendMode, (@{
         }
     }
     
-    FFFastImageGradient * gradient = [[FFFastImageGradient alloc] initWithColors:colors blendMode:blendMode locations:locations];
+    FFFastImageGradient * gradient = [[FFFastImageGradient alloc] initWithColors:colors blendMode:blendMode locations:locations angle:[RCTConvert NSNumber:json[@"angle"]]];
     
     return gradient;
 }
