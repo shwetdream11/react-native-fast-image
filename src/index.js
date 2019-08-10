@@ -124,7 +124,7 @@ const FastImageSourcePropType = PropTypes.shape({
 
 const FastImageGradientPropType = PropTypes.shape({
   blendMode: PropTypes.oneOf(Object.keys(FastImage.blendMode)),
-  colors: PropTypes.arrayOf(PropTypes.string | PropTypes.number),
+  colors: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
   locations: PropTypes.arrayOf(PropTypes.number),
   angle: PropTypes.number,
 })
