@@ -2,11 +2,22 @@ package com.dylanvann.fastimage;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -16,6 +27,8 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -92,7 +105,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         RCTEventEmitter eventEmitter = context.getJSModule(RCTEventEmitter.class);
         int viewId = view.getId();
         eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_START_EVENT, new WritableNativeMap());
-
         if (requestManager != null) {
             requestManager
                     // This will make this work for remote and local images. e.g.
@@ -106,6 +118,14 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     .listener(new FastImageRequestListener(key))
                     .into(view);
         }
+    }
+
+    @ReactProp(name = "gradient")
+    public void setGradient(FastImageViewWithUrl view, @Nullable ReadableMap gradient) {
+        if (gradient == null) {
+            return;
+        }
+        view.gradient = FastImageViewConverter.getImageGradient(view.getContext(), gradient);
     }
 
     @ReactProp(name = "resizeMode")
@@ -200,5 +220,43 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
             return activity.isFinishing() || activity.isChangingConfigurations();
         }
 
+    }
+}
+
+class Blend extends BitmapTransformation {
+    private static final String ID = "com.bumptech.glide.transformations.Blend";
+    private static final byte[] ID_BYTES = ID.getBytes(Charset.forName("UTF-8"));
+
+    private FastImageGradient mGradient;
+
+    public Blend(FastImageGradient gradient) {
+        super();
+        mGradient = gradient;
+    }
+
+    @Override
+    public Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
+        return addGradient(toTransform);
+    }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest) {
+        messageDigest.update(ID_BYTES);
+    }
+
+    Bitmap addGradient(Bitmap originalBitmap) {
+        int width = originalBitmap.getWidth();
+        int height = originalBitmap.getHeight();
+        Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(updatedBitmap);
+
+        canvas.drawBitmap(originalBitmap, 0, 0, null);
+        Paint paint = new Paint();
+        LinearGradient shader = new LinearGradient(0, 0, width, height, mGradient.mColors, mGradient.mLocations, Shader.TileMode.CLAMP);
+        paint.setShader(shader);
+        paint.setXfermode(new PorterDuffXfermode(mGradient.mBlendMode));
+        canvas.drawRect(0, 0, width, height, paint);
+
+        return updatedBitmap;
     }
 }

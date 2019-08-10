@@ -1,5 +1,54 @@
 #import "FFFastImageView.h"
 
+@interface UIImage (Tint)
+- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations;
+@end
+
+@implementation UIImage (Tint)
+
+- (UIImage *)tintedImageWithColor:(NSArray<UIColor *> *)colors blendingMode:(CGBlendMode)blendMode locations:(NSArray<NSNumber *>*)locations
+{
+    CGFloat *_locations = nil;
+    
+    _locations = malloc(sizeof(CGFloat) * colors.count);
+    
+    for (NSInteger i = 0; i < colors.count; i++) {
+        if (locations.count > i) {
+            _locations[i] = locations[i].floatValue;
+        }
+        else {
+            _locations[i] = (1.0 / (colors.count - 1)) * i;
+        }
+    }
+    
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+    CGRect bounds = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [self drawInRect:bounds blendMode:kCGBlendModeNormal alpha:1.0f];
+    CGContextSetBlendMode(ctx, blendMode);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    NSMutableArray *_colors = [NSMutableArray new];
+    [colors enumerateObjectsUsingBlock:^(UIColor * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [_colors addObject:(__bridge id)obj.CGColor];
+    }];
+    CGGradientRef grad = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)_colors, _locations);
+    CGColorSpaceRelease(colorSpace);
+    
+    CGContextDrawLinearGradient(ctx, grad, CGPointMake(0, 0), CGPointMake(bounds.size.width, bounds.size.height), 0);
+    CGGradientRelease(grad);
+    
+    UIImage *tintedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return tintedImage;
+}
+
+@end
+
+
+
 @implementation FFFastImageView {
     BOOL hasSentOnLoadStart;
     BOOL hasCompleted;
@@ -168,10 +217,23 @@
                                 if (_onFastImageLoadEnd) {
                                     _onFastImageLoadEnd(@{});
                                 }
+                                [self updateGradient];
                             }
                         }];
     }
 }
 
-@end
+- (void)setGradient:(FFFastImageGradient *)gradient {
+    if(_gradient != gradient) {
+        _gradient = gradient;
+        [self updateGradient];
+    }
+}
 
+- (void)updateGradient {
+    if (_gradient && [self image]) {
+        [self setImage:[[self image] tintedImageWithColor:_gradient.colors blendingMode:_gradient.blendMode locations: _gradient.locations]];
+    }
+}
+
+@end

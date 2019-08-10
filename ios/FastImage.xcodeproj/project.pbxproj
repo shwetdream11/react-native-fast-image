@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9964191D22FECED800462C78 /* FFFastImageGradient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9964191C22FECED800462C78 /* FFFastImageGradient.m */; };
 		FCFB253F1EA5562700F59778 /* FFFastImageSource.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFB25381EA5562700F59778 /* FFFastImageSource.m */; };
 		FCFB25401EA5562700F59778 /* FFFastImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFB253A1EA5562700F59778 /* FFFastImageView.m */; };
 		FCFB25411EA5562700F59778 /* FFFastImageViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = FCFB253C1EA5562700F59778 /* FFFastImageViewManager.m */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9964191B22FECED800462C78 /* FFFastImageGradient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFastImageGradient.h; sourceTree = "<group>"; };
+		9964191C22FECED800462C78 /* FFFastImageGradient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFastImageGradient.m; sourceTree = "<group>"; };
 		A287971D1DE0C0A60081BDFA /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFastImage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCFB25371EA5562700F59778 /* FFFastImageSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFFastImageSource.h; sourceTree = "<group>"; };
 		FCFB25381EA5562700F59778 /* FFFastImageSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFFastImageSource.m; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 		FCFB25361EA5562700F59778 /* FastImage */ = {
 			isa = PBXGroup;
 			children = (
+				9964191B22FECED800462C78 /* FFFastImageGradient.h */,
+				9964191C22FECED800462C78 /* FFFastImageGradient.m */,
 				FCFB25371EA5562700F59778 /* FFFastImageSource.h */,
 				FCFB25381EA5562700F59778 /* FFFastImageSource.m */,
 				FCFB25391EA5562700F59778 /* FFFastImageView.h */,
@@ -119,6 +124,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = A28797141DE0C0A60081BDFA;
@@ -140,6 +146,7 @@
 				FCFB25421EA5562700F59778 /* RCTConvert+FFFastImage.m in Sources */,
 				FCFB25401EA5562700F59778 /* FFFastImageView.m in Sources */,
 				FCFB253F1EA5562700F59778 /* FFFastImageSource.m in Sources */,
+				9964191D22FECED800462C78 /* FFFastImageGradient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,7 @@ typedef NS_ENUM(NSInteger, FFFCacheControl) {
 // cache control mode
 @property (nonatomic) FFFCacheControl cacheControl;
 
+
 - (instancetype)initWithURL:(NSURL *)url
                    priority:(FFFPriority)priority
                     headers:(NSDictionary *)headers

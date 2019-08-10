@@ -2,6 +2,7 @@ package com.dylanvann.fastimage;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
@@ -18,6 +19,7 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.bridge.NoSuchKeyException;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.views.imagehelper.ImageSource;
@@ -47,6 +49,11 @@ class FastImageViewConverter {
                 put("high", Priority.HIGH);
             }};
 
+    private static final Map<String, PorterDuff.Mode> FAST_IMAGE_BLEND_MODE_MAP =
+            new HashMap<String, PorterDuff.Mode>() {{
+                put("overlay", PorterDuff.Mode.OVERLAY);
+            }};
+
     private static final Map<String, ImageView.ScaleType> FAST_IMAGE_RESIZE_MODE_MAP =
             new HashMap<String, ImageView.ScaleType>() {{
                 put("contain", ScaleType.FIT_CENTER);
@@ -58,6 +65,10 @@ class FastImageViewConverter {
     // Resolve the source uri to a file path that android understands.
     static FastImageSource getImageSource(Context context, ReadableMap source) {
         return new FastImageSource(context, source.getString("uri"), getHeaders(source));
+    }
+
+    static FastImageGradient getImageGradient(Context context, ReadableMap gradient) {
+        return new FastImageGradient(context, getColors(gradient), getBlendMode(gradient), getLocations(gradient));
     }
 
     static Headers getHeaders(ReadableMap source) {
@@ -120,6 +131,28 @@ class FastImageViewConverter {
 
     static ScaleType getScaleType(String propValue) {
         return getValue("resizeMode", "cover", FAST_IMAGE_RESIZE_MODE_MAP, propValue);
+    }
+
+    private static PorterDuff.Mode getBlendMode(ReadableMap gradient) {
+        return getValueFromSource("blendMode", "overlay", FAST_IMAGE_BLEND_MODE_MAP, gradient);
+    }
+
+    private static int[] getColors(ReadableMap gradient) {
+        ReadableArray propValue = gradient.getArray("colors");
+        int[] colors = new int[propValue.size()];
+        for (int i = 0, size = propValue.size(); i < size; i++) {
+            colors[i] = propValue.getInt(i);
+        }
+        return colors;
+    }
+
+    private static float[] getLocations(ReadableMap gradient) {
+        ReadableArray propValue = gradient.getArray("locations");
+        float[] locations = new float[propValue.size()];
+        for (int i = 0, size = propValue.size(); i < size; i++) {
+            locations[i] = (float)propValue.getDouble(i);
+        }
+        return locations;
     }
 
     private static <T> T getValue(String propName, String defaultPropValue, Map<String, T> map, String propValue) {
