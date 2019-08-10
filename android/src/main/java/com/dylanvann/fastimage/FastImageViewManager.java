@@ -219,44 +219,5 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         } else {
             return activity.isFinishing() || activity.isChangingConfigurations();
         }
-
-    }
-}
-
-class Blend extends BitmapTransformation {
-    private static final String ID = "com.bumptech.glide.transformations.Blend";
-    private static final byte[] ID_BYTES = ID.getBytes(Charset.forName("UTF-8"));
-
-    private FastImageGradient mGradient;
-
-    public Blend(FastImageGradient gradient) {
-        super();
-        mGradient = gradient;
-    }
-
-    @Override
-    public Bitmap transform(BitmapPool pool, Bitmap toTransform, int outWidth, int outHeight) {
-        return addGradient(toTransform);
-    }
-
-    @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) {
-        messageDigest.update(ID_BYTES);
-    }
-
-    Bitmap addGradient(Bitmap originalBitmap) {
-        int width = originalBitmap.getWidth();
-        int height = originalBitmap.getHeight();
-        Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(updatedBitmap);
-
-        canvas.drawBitmap(originalBitmap, 0, 0, null);
-        Paint paint = new Paint();
-        LinearGradient shader = new LinearGradient(0, 0, width, height, mGradient.mColors, mGradient.mLocations, Shader.TileMode.CLAMP);
-        paint.setShader(shader);
-        paint.setXfermode(new PorterDuffXfermode(mGradient.mBlendMode));
-        canvas.drawRect(0, 0, width, height, paint);
-
-        return updatedBitmap;
     }
 }
