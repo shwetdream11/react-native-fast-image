@@ -15,12 +15,13 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.model.GlideUrl;
 
 class FastImageViewWithUrl extends ImageView {
-    public GlideUrl glideUrl;
-    public @Nullable FastImageGradient gradient;
+    private GlideUrl glideUrl;
+    private  @Nullable FastImageGradient gradient;
 
     public FastImageViewWithUrl(Context context) {
         super(context);
     }
+
 
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
@@ -43,7 +44,7 @@ class FastImageViewWithUrl extends ImageView {
         };
     }
 
-    Bitmap addGradient(Bitmap originalBitmap) {
+    private Bitmap addGradient(Bitmap originalBitmap) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
         Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -74,5 +75,17 @@ class FastImageViewWithUrl extends ImageView {
         canvas.drawRect(0, 0, width, height, paint);
 
         return updatedBitmap;
+    }
+
+    public void setGradient(@Nullable FastImageGradient gradient) {
+        this.gradient = gradient;
+    }
+
+    public GlideUrl getGlideUrl() {
+        return glideUrl;
+    }
+
+    public void setGlideUrl(GlideUrl glideUrl) {
+        this.glideUrl = glideUrl;
     }
 }

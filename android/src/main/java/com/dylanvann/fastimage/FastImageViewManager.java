@@ -2,22 +2,11 @@ package com.dylanvann.fastimage;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -27,8 +16,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,8 +60,8 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                 requestManager.clear(view);
             }
 
-            if (view.glideUrl != null) {
-                FastImageOkHttpProgressGlideModule.forget(view.glideUrl.toStringUrl());
+            if (view.getGlideUrl() != null) {
+                FastImageOkHttpProgressGlideModule.forget(view.getGlideUrl().toStringUrl());
             }
             // Clear the image.
             view.setImageDrawable(null);
@@ -86,7 +73,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         final GlideUrl glideUrl = imageSource.getGlideUrl();
 
         // Cancel existing request.
-        view.glideUrl = glideUrl;
+        view.setGlideUrl(glideUrl);
         if (requestManager != null) {
             requestManager.clear(view);
         }
@@ -125,7 +112,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         if (gradient == null) {
             return;
         }
-        view.gradient = FastImageViewConverter.getImageGradient(view.getContext(), gradient);
+        view.setGradient(FastImageViewConverter.getImageGradient(view.getContext(), gradient));
     }
 
     @ReactProp(name = "resizeMode")
@@ -141,8 +128,8 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
             requestManager.clear(view);
         }
 
-        if (view.glideUrl != null) {
-            final String key = view.glideUrl.toString();
+        if (view.getGlideUrl() != null) {
+            final String key = view.getGlideUrl().toString();
             FastImageOkHttpProgressGlideModule.forget(key);
             List<FastImageViewWithUrl> viewsForKey = VIEWS_FOR_URLS.get(key);
             if (viewsForKey != null) {

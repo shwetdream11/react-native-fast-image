@@ -1,16 +1,5 @@
 package com.dylanvann.fastimage;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LinearGradient;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.bumptech.glide.load.DataSource;
@@ -70,5 +59,3 @@ public class FastImageRequestListener implements RequestListener<Drawable> {
         return false;
     }
 }
-
-
