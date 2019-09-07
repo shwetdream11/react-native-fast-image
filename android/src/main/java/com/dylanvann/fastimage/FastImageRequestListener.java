@@ -54,8 +54,12 @@ public class FastImageRequestListener implements RequestListener<Drawable> {
         ThemedReactContext context = (ThemedReactContext) view.getContext();
         RCTEventEmitter eventEmitter = context.getJSModule(RCTEventEmitter.class);
         int viewId = view.getId();
-        eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_EVENT, mapFromResource(resource));
-        eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_END_EVENT, new WritableNativeMap());
+        WritableMap resourceMap = mapFromResource(resource);
+        resourceMap.putString("blendModeQuality", view.getBlendModeQuality().value);
+        WritableNativeMap nativeMap = new WritableNativeMap();
+        nativeMap.putString("blendModeQuality", view.getBlendModeQuality().value);
+        eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_EVENT, resourceMap);
+        eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_END_EVENT, nativeMap);
         return false;
     }
 }

@@ -16,17 +16,20 @@ import com.bumptech.glide.load.model.GlideUrl;
 
 class FastImageViewWithUrl extends ImageView {
     private GlideUrl glideUrl;
-    private  @Nullable FastImageGradient gradient;
+    private @Nullable FastImageGradient gradient;
+    private BlendModeQuality blendModeQuality;
 
     public FastImageViewWithUrl(Context context) {
         super(context);
+        blendModeQuality = BlendModeQuality.NONE;
     }
-
 
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
-        if (gradient != null && (drawable instanceof BitmapDrawable)) {
-            Bitmap gradientBitmap = addGradient(((BitmapDrawable) drawable).getBitmap());
+        Memory memory = Utils.getMemoryAvailablity();
+        setBlendModeQuality(memory);
+        if (gradient != null && (drawable instanceof BitmapDrawable) && memory != Memory.LOW) {
+            Bitmap gradientBitmap = addGradient(((BitmapDrawable) drawable).getBitmap(), memory);
             BitmapDrawable gradientDrawable = new BitmapDrawable(getResources(), gradientBitmap);
             super.setImageDrawable(gradientDrawable);
         } else {
@@ -35,8 +38,8 @@ class FastImageViewWithUrl extends ImageView {
     }
 
     private float[] calculateGradientLocationWithAngle(float angle) {
-        float angleRad = (angle - 90.0f) * ((float)Math.PI / 180.0f);
-        float length = (float)Math.sqrt(2.0);
+        float angleRad = (angle - 90.0f) * ((float) Math.PI / 180.0f);
+        float length = (float) Math.sqrt(2.0);
 
         return new float[]{
                 (float) Math.cos(angleRad) * length,
@@ -44,10 +47,47 @@ class FastImageViewWithUrl extends ImageView {
         };
     }
 
-    private Bitmap addGradient(Bitmap originalBitmap) {
+    public GlideUrl getGlideUrl() {
+        return glideUrl;
+    }
+
+    public void setGlideUrl(GlideUrl glideUrl) {
+        this.glideUrl = glideUrl;
+    }
+
+    @Nullable
+    public FastImageGradient getGradient() {
+        return gradient;
+    }
+
+    public void setGradient(@Nullable FastImageGradient gradient) {
+        this.gradient = gradient;
+    }
+
+    private void setBlendModeQuality(Memory memory) {
+        if (gradient != null) {
+            switch (memory) {
+                case FULL:
+                    blendModeQuality = BlendModeQuality.HIGH;
+                    break;
+                case MEDIUM:
+                    blendModeQuality = BlendModeQuality.MEDIUM;
+                    break;
+                case LOW:
+                    blendModeQuality = BlendModeQuality.LOW;
+                    break;
+            }
+        }
+    }
+
+    public BlendModeQuality getBlendModeQuality() {
+        return blendModeQuality;
+    }
+
+    Bitmap addGradient(Bitmap originalBitmap, Memory memory) {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
-        Bitmap updatedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap updatedBitmap = Bitmap.createBitmap(width, height, memory == Memory.FULL ? Bitmap.Config.ARGB_8888 : Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(updatedBitmap);
 
         canvas.drawBitmap(originalBitmap, 0, 0, null);
@@ -73,19 +113,6 @@ class FastImageViewWithUrl extends ImageView {
         paint.setShader(shader);
         paint.setXfermode(new PorterDuffXfermode(gradient.mBlendMode));
         canvas.drawRect(0, 0, width, height, paint);
-
         return updatedBitmap;
-    }
-
-    public void setGradient(@Nullable FastImageGradient gradient) {
-        this.gradient = gradient;
-    }
-
-    public GlideUrl getGlideUrl() {
-        return glideUrl;
-    }
-
-    public void setGlideUrl(GlideUrl glideUrl) {
-        this.glideUrl = glideUrl;
     }
 }
