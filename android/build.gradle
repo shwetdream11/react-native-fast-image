@@ -15,7 +15,7 @@ def safeExtGet(prop, fallback) {
 }
 
 def _reactNativeVersion = safeExtGet("reactNative", "+")
-def _compileSdkVersion = safeExtGet("compileSdkVersion", 26)
+def _compileSdkVersion = safeExtGet("compileSdkVersion", 28)
 def _glideVersion = safeExtGet("glideVersion", "4.9.0")
 
 android {
@@ -34,8 +34,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion safeExtGet("minSdkVersion", 16)
-        targetSdkVersion safeExtGet("targetSdkVersion", 26)
+        minSdkVersion safeExtGet("minSdkVersion", 21)
+        targetSdkVersion safeExtGet("targetSdkVersion", 28)
         versionCode 1
         versionName "1.0"
     }

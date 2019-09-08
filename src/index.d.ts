@@ -87,6 +87,12 @@ export interface OnLoadEvent {
     }
 }
 
+export interface OnLoadEndEvent {
+    nativeEvent: {
+        blendModeQuality: string
+    }
+}
+
 export interface OnProgressEvent {
     nativeEvent: {
         loaded: number
@@ -99,6 +105,7 @@ export interface FastImageProperties {
     gradient?: FastImageGradient
     resizeMode?: FastImage.ResizeMode
     fallback?: boolean
+
     onLoadStart?(): void
 
     onProgress?(event: OnProgressEvent): void
@@ -107,7 +114,7 @@ export interface FastImageProperties {
 
     onError?(): void
 
-    onLoadEnd?(): void
+    onLoadEnd?(event: OnLoadEndEvent): void
 
     /**
      * onLayout function

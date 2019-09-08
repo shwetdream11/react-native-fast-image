@@ -3,7 +3,7 @@ package com.dylanvann.fastimage;
 public enum Memory {
     FULL(25),
     MEDIUM(15),
-    LOW(5);
+    LOW(0);
     int THRESHOLD_PERCENTAGE = 0;
 
     Memory(int threshold) {

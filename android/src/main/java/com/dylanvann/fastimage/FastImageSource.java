@@ -7,7 +7,7 @@ import android.text.TextUtils;
 
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.Headers;
-import com.facebook.react.views.ImageSource;
+import com.facebook.react.views.imagehelper.ImageSource;
 
 import javax.annotation.Nullable;
 
