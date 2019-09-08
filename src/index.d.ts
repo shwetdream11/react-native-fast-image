@@ -27,6 +27,10 @@ declare namespace FastImage {
         type web = 'web'
     }
 
+    namespace blendMode {
+        type overlay = 'overlay'
+    }
+
     export type Priority =
         | FastImage.priority.low
         | FastImage.priority.normal
@@ -42,6 +46,9 @@ declare namespace FastImage {
         | FastImage.cacheControl.cacheOnly
         | FastImage.cacheControl.immutable
         | FastImage.cacheControl.web
+
+    export type BlendMode =
+        | FastImage.blendMode.overlay
 }
 
 export type FastImageSource = {
@@ -49,6 +56,13 @@ export type FastImageSource = {
     headers?: { [key: string]: string }
     priority?: FastImage.Priority
     cache?: FastImage.Cache
+}
+
+export type FastImageGradient = {
+    blendMode: FastImage.BlendMode
+    colors: Array<string | number>
+    locations: Array<number>
+    angle: number
 }
 
 export interface ImageStyle extends FlexStyle, TransformsStyle, ShadowStyleIOS {
@@ -82,9 +96,9 @@ export interface OnProgressEvent {
 
 export interface FastImageProperties {
     source: FastImageSource | number
+    gradient?: FastImageGradient
     resizeMode?: FastImage.ResizeMode
     fallback?: boolean
-
     onLoadStart?(): void
 
     onProgress?(event: OnProgressEvent): void

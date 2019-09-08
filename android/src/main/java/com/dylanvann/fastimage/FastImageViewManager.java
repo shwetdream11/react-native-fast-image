@@ -60,8 +60,8 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                 requestManager.clear(view);
             }
 
-            if (view.glideUrl != null) {
-                FastImageOkHttpProgressGlideModule.forget(view.glideUrl.toStringUrl());
+            if (view.getGlideUrl() != null) {
+                FastImageOkHttpProgressGlideModule.forget(view.getGlideUrl().toStringUrl());
             }
             // Clear the image.
             view.setImageDrawable(null);
@@ -73,7 +73,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         final GlideUrl glideUrl = imageSource.getGlideUrl();
 
         // Cancel existing request.
-        view.glideUrl = glideUrl;
+        view.setGlideUrl(glideUrl);
         if (requestManager != null) {
             requestManager.clear(view);
         }
@@ -92,7 +92,6 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         RCTEventEmitter eventEmitter = context.getJSModule(RCTEventEmitter.class);
         int viewId = view.getId();
         eventEmitter.receiveEvent(viewId, REACT_ON_LOAD_START_EVENT, new WritableNativeMap());
-
         if (requestManager != null) {
             requestManager
                     // This will make this work for remote and local images. e.g.
@@ -108,6 +107,14 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         }
     }
 
+    @ReactProp(name = "gradient")
+    public void setGradient(FastImageViewWithUrl view, @Nullable ReadableMap gradient) {
+        if (gradient == null) {
+            return;
+        }
+        view.setGradient(FastImageViewConverter.getImageGradient(view.getContext(), gradient));
+    }
+
     @ReactProp(name = "resizeMode")
     public void setResizeMode(FastImageViewWithUrl view, String resizeMode) {
         final FastImageViewWithUrl.ScaleType scaleType = FastImageViewConverter.getScaleType(resizeMode);
@@ -121,8 +128,8 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
             requestManager.clear(view);
         }
 
-        if (view.glideUrl != null) {
-            final String key = view.glideUrl.toString();
+        if (view.getGlideUrl() != null) {
+            final String key = view.getGlideUrl().toString();
             FastImageOkHttpProgressGlideModule.forget(key);
             List<FastImageViewWithUrl> viewsForKey = VIEWS_FOR_URLS.get(key);
             if (viewsForKey != null) {
@@ -199,6 +206,5 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         } else {
             return activity.isFinishing() || activity.isChangingConfigurations();
         }
-
     }
 }

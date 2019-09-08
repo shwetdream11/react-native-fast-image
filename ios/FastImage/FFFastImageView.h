@@ -15,6 +15,7 @@
 #import <React/RCTResizeMode.h>
 
 #import "FFFastImageSource.h"
+#import "FFFastImageGradient.h"
 
 @interface FFFastImageView : FLAnimatedImageView
 
@@ -25,6 +26,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onFastImageLoadEnd;
 @property (nonatomic, assign) RCTResizeMode resizeMode;
 @property (nonatomic, strong) FFFastImageSource *source;
+@property (nonatomic, strong) FFFastImageGradient * gradient;
 
 @end
 
