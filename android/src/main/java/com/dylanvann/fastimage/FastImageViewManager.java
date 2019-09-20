@@ -6,7 +6,9 @@ import android.os.Build;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -101,6 +103,8 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     //    - android.resource://
                     //    - data:image/png;base64
                     .load(imageSource.getSourceForLoad())
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(RequestOptions.bitmapTransform(new FastImageGradientTransformation(view.getGradient(), view.getGlideUrl().toString())))
                     .apply(FastImageViewConverter.getOptions(source))
                     .listener(new FastImageRequestListener(key))
                     .into(view);
@@ -109,10 +113,10 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
 
     @ReactProp(name = "gradient")
     public void setGradient(FastImageViewWithUrl view, @Nullable ReadableMap gradient) {
-        if (gradient == null) {
-            return;
-        }
         view.setGradient(FastImageViewConverter.getImageGradient(view.getContext(), gradient));
+        if (view.getGlideUrl() != null) {
+            requestManager.applyDefaultRequestOptions(RequestOptions.bitmapTransform(new FastImageGradientTransformation(view.getGradient(), view.getGlideUrl().toString())));
+        }
     }
 
     @ReactProp(name = "resizeMode")

@@ -3,6 +3,8 @@ package com.dylanvann.fastimage;
 import android.content.Context;
 import android.graphics.PorterDuff;
 
+import java.util.Arrays;
+
 public class FastImageGradient {
     public PorterDuff.Mode mBlendMode;
     public int[] mColors;
@@ -15,5 +17,10 @@ public class FastImageGradient {
         mBlendMode = blendMode;
         mLocations = locations;
         mAngle = angle;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(mColors) ^ Arrays.hashCode(mLocations) ^ mAngle ^ mBlendMode.hashCode();
     }
 }
