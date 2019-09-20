@@ -103,9 +103,9 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
                     //    - android.resource://
                     //    - data:image/png;base64
                     .load(imageSource.getSourceForLoad())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .apply(RequestOptions.bitmapTransform(new FastImageGradientTransformation(view.getGradient(), view.getGlideUrl().toString())))
                     .apply(FastImageViewConverter.getOptions(source))
+                    .apply(RequestOptions.bitmapTransform(new FastImageGradientTransformation(view.getGradient(), view.getGlideUrl().toString())))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(new FastImageRequestListener(key))
                     .into(view);
         }
