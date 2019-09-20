@@ -97,6 +97,8 @@ public class FastImageGradientTransformation extends BitmapTransformation {
 
     @Override
     public void updateDiskCacheKey(MessageDigest messageDigest) {
-        messageDigest.update((ID + hashCode()).getBytes(Charset.forName("UTF-8")));
+        if (gradient != null) {
+            messageDigest.update((ID + hashCode()).getBytes(Charset.forName("UTF-8")));
+        }
     }
 }
