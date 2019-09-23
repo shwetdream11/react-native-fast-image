@@ -48,7 +48,7 @@ public class FastImageGradientTransformation extends BitmapTransformation {
         int width = originalBitmap.getWidth();
         int height = originalBitmap.getHeight();
 
-        Bitmap updatedBitmap = pool.get(width, height, Bitmap.Config.ARGB_8888);
+        Bitmap updatedBitmap = pool.get(width, height, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(updatedBitmap);
 
         canvas.drawBitmap(originalBitmap, 0, 0, null);
